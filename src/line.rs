@@ -50,7 +50,7 @@ impl Line {
 	pub(crate) fn distance_to_point(&self, p: &Point) -> f64 {
 		let num = (self.p2.y - self.p1.y)*p.x - (self.p2.x - self.p1.x)*p.y + self.p2.x*self.p1.y - self.p2.y*self.p1.x;
 		let denom = self.length();
-		if denom < EPSILON {
+		if f64::abs(denom) < EPSILON {
 			return num/denom;
 		}
 		//basic error information
@@ -76,8 +76,58 @@ impl Line {
 
 	//check if slopes are equal
 	pub(crate) fn is_parallel(&self, other: &Line) -> bool {
-		let m1 = (self.p2.x - self.p1.x) / (self.p2.y - self.p1.y);
-		let m2 = (other.p2.x - other.p1.x) / (other.p2.y - other.p1.y);
-		return f64::abs(m2 - m2) < EPSILON;
+		let a1 = self.p2.y - self.p1.y;
+		let b1 = self.p1.x - self.p2.x;
+
+		let a2 = other.p2.y - other.p1.y;
+		let b2 = other.p1.x - other.p2.x;
+
+
+		f64::abs(a1*b2 - a2*b1) < EPSILON
 	}
+
+
+	//TODO Make this work with one infinite line and one segment
+	pub(crate) fn intersects(&self, other: &Line) -> bool {
+		if self.infinite && other.infinite && self.is_parallel(other) {
+			return true
+		}
+
+		let o1 = self.p1.orientation(&self.p2, &other.p1);
+		let o2 = self.p1.orientation(&self.p2, &other.p2);
+		let o3 = other.p1.orientation(&other.p2, &self.p1);
+		let o4 = other.p1.orientation(&other.p2, &self.p2);
+
+		o1 != o2 && o3 != o4
+
+	}
+
+	//Intersection of line SEGMENTS 
+	// TODO make it work for infinite lines.
+	pub(crate) fn intersection(&self, other: &Line) -> Point {
+
+		//do a parallel check. Would just call the function but these values are needed later
+		let a1 = self.p2.y - self.p1.y;
+		let b1 = self.p1.x - self.p2.x;
+		let c1 = a1*self.p1.x + b1*self.p1.y;
+
+		let a2 = other.p2.y - other.p1.y;
+		let b2 = other.p1.x - other.p2.x;
+		let c2 = a2*other.p1.x + b2*other.p1.y;
+
+		let d = a1*b2 - a2*b1;
+		if f64::abs(d) < EPSILON {
+			//Throw an error here, lines were parallel
+			return Point {
+				x: f64::MAX,
+				y: f64::MAX,
+			}
+		}
+		Point {
+			x: (b2*c1 - b1*c2)/d,
+			y: (a1*c2 - a2*c1)/d,
+		}
+	}
+
+
 }
