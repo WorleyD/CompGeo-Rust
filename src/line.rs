@@ -43,11 +43,11 @@ impl Line {
 
 // Methods
 impl Line {
-	pub(crate) fn length(&self) -> f64 {
+	pub fn length(&self) -> f64 {
 		self.p1.distance(&self.p2)
 	}
 
-	pub(crate) fn distance_to_point(&self, p: &Point) -> f64 {
+	pub fn distance_to_point(&self, p: &Point) -> f64 {
 		let num = (self.p2.y - self.p1.y)*p.x - (self.p2.x - self.p1.x)*p.y + self.p2.x*self.p1.y - self.p2.y*self.p1.x;
 		let denom = self.length();
 		if f64::abs(denom) < EPSILON {
@@ -57,7 +57,7 @@ impl Line {
 		-1.0
 	}
 
-	pub(crate) fn distance_to_line(&self, other: &Line) -> f64 {
+	pub fn distance_to_line(&self, other: &Line) -> f64 {
 		if self.infinite || other.infinite {
 			if self.is_parallel(other) {
 				//all distances are the same so return this one
@@ -75,7 +75,7 @@ impl Line {
 	}
 
 	//check if slopes are equal
-	pub(crate) fn is_parallel(&self, other: &Line) -> bool {
+	pub fn is_parallel(&self, other: &Line) -> bool {
 		let a1 = self.p2.y - self.p1.y;
 		let b1 = self.p1.x - self.p2.x;
 
@@ -88,7 +88,7 @@ impl Line {
 
 
 	//TODO Make this work with one infinite line and one segment
-	pub(crate) fn intersects(&self, other: &Line) -> bool {
+	pub fn intersects(&self, other: &Line) -> bool {
 		if self.infinite && other.infinite && self.is_parallel(other) {
 			return true
 		}
@@ -104,7 +104,7 @@ impl Line {
 
 	//Intersection of line SEGMENTS 
 	// TODO make it work for infinite lines.
-	pub(crate) fn intersection(&self, other: &Line) -> Point {
+	pub fn intersection(&self, other: &Line) -> Point {
 
 		//do a parallel check. Would just call the function but these values are needed later
 		let a1 = self.p2.y - self.p1.y;

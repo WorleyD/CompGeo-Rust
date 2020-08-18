@@ -29,7 +29,7 @@ impl Polygon {
 
 //Methods
 impl Polygon {
-	pub(crate) fn area(&self) -> f64{
+	pub fn area(&self) -> f64{
 		let n = self.points.len();
 		let mut xs = Vec::new();
 		let mut ys = Vec::new();

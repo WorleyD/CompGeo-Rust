@@ -20,20 +20,20 @@ impl Point {
 
 //Methods
 impl Point {
-	pub(crate) fn distance(&self, other: &Point) -> f64{
+	pub fn distance(&self, other: &Point) -> f64{
 		((self.x - other.x)*(self.x-other.x) + (self.y - other.y)*(self.y - other.y)).sqrt()
 	}
 
-	pub(crate) fn distance_to_line(&self, other: &Line) -> f64 {
+	pub fn distance_to_line(&self, other: &Line) -> f64 {
 		other.distance_to_point(&self)
 	}
 
-	pub(crate) fn collinear(&self, p1: &Point, p2: &Point) -> f64 {
+	pub fn collinear(&self, p1: &Point, p2: &Point) -> f64 {
 		0.5*(self.x - p1.x)*(p1.y - p2.y) - (p1.x-p2.x)*(self.y-p1.y)
 	}
 
 	//helper function to find orientation of 3 points
-	pub(crate) fn orientation(&self, p1: &Point, p2: &Point) -> i32 {
+	pub fn orientation(&self, p1: &Point, p2: &Point) -> i32 {
 		let o = self.collinear(p1, p2);
 		if f64::abs(o) < EPSILON {
 			return 0;

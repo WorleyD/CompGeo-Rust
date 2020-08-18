@@ -26,26 +26,26 @@ impl Circle {
 
 //Methods
 impl Circle {
-	pub(crate) fn circumference(&self) -> f64 {
+	pub fn circumference(&self) -> f64 {
 		2.0*PI*self.radius
 	}
 
-	pub(crate) fn area(&self) -> f64 {
+	pub fn area(&self) -> f64 {
 		2.0*PI*self.radius*self.radius
 	}
 
-	pub(crate) fn intersects_circle(&self, other: &Circle) -> bool {
+	pub fn intersects_circle(&self, other: &Circle) -> bool {
 		self.center.distance(&other.center) < self.radius + other.radius 
 	}
 
-	pub(crate) fn distance_from_circle(&self, other: &Circle) -> f64 {
+	pub fn distance_from_circle(&self, other: &Circle) -> f64 {
 		if self.intersects_circle(other) {
 			return 0.0;
 		}
 		self.center.distance(&other.center) - self.radius + other.radius 
 	}
 
-	pub(crate) fn distance_from_point(&self, p:&Point) -> f64 {
+	pub fn distance_from_point(&self, p:&Point) -> f64 {
 		let d = self.center.distance(&p) - self.radius;
 		if d < 0.0 {
 			return 0.0;
@@ -53,12 +53,12 @@ impl Circle {
 		d
 	}
 
-	pub(crate) fn contains_circle(&self, other: &Circle) -> bool {
+	pub fn contains_circle(&self, other: &Circle) -> bool {
 		self.center.distance(&other.center) + other.radius < self.radius 
 	}
 
 	//p1 and p2 are points that lie on the circle
-	pub(crate) fn arc_length(&self, p1: &Point, p2: &Point) ->f64 {
+	pub fn arc_length(&self, p1: &Point, p2: &Point) ->f64 {
 		let c = self.circumference();
 		let d1 = self.distance_from_point(&p1);
 		let d2 = self.distance_from_point(&p2);
