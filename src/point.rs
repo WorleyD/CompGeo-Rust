@@ -28,13 +28,19 @@ impl Point {
 		other.distance_to_point(&self)
 	}
 
-	pub fn collinear(&self, p1: &Point, p2: &Point) -> f64 {
-		0.5*(self.x - p1.x)*(p1.y - p2.y) - (p1.x-p2.x)*(self.y-p1.y)
+	pub fn collinear(&self, p1: &Point, p2: &Point) -> bool {
+		self.triangle_area(p1, p2) < EPSILON
+	}
+
+	//helper function for orientation
+	pub(crate) fn triangle_area(&self, p1: &Point, p2: &Point) -> f64 {
+		f64::abs(0.5*(self.x - p1.x)*(p1.y - p2.y) - (p1.x-p2.x)*(self.y-p1.y))
 	}
 
 	//helper function to find orientation of 3 points
 	pub fn orientation(&self, p1: &Point, p2: &Point) -> i32 {
-		let o = self.collinear(p1, p2);
+		let o = (p1.y - self.y)*(p2.x - p1.x) - (p1.x - self.x)*(p2.y - p1.y);
+		
 		if f64::abs(o) < EPSILON {
 			return 0;
 		}
@@ -45,6 +51,7 @@ impl Point {
 
 // Returns a vector of indexes for points in convex hull
 // TODO implement Copy for Points so a vec of points can be returned
+// Not even remotely tested
 pub fn convex_hull(points: &Vec<Point>) -> Vec<usize>{
 	let n = points.len();
 
