@@ -53,6 +53,10 @@ impl Circle {
 		d
 	}
 
+	pub(crate) fn contains_circle(&self, other: &Circle) -> bool {
+		self.center.distance(&other.center) + other.radius < self.radius 
+	}
+
 	//p1 and p2 are points that lie on the circle
 	pub(crate) fn arc_length(&self, p1: &Point, p2: &Point) ->f64 {
 		let c = self.circumference();
