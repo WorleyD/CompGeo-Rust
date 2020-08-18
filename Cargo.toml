@@ -1,5 +1,5 @@
 [package]
-name = "libtest"
+name = "compgeo-rust"
 version = "0.1.0"
 authors = ["worleyd"]
 edition = "2018"

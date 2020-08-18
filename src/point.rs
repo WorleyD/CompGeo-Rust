@@ -32,7 +32,7 @@ impl Point {
 		self.triangle_area(p1, p2) < EPSILON
 	}
 
-	//helper function for orientation
+	//helper function for collinear
 	pub(crate) fn triangle_area(&self, p1: &Point, p2: &Point) -> f64 {
 		f64::abs(0.5*(self.x - p1.x)*(p1.y - p2.y) - (p1.x-p2.x)*(self.y-p1.y))
 	}
