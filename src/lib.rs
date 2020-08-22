@@ -53,19 +53,68 @@ mod tests {
 
 	//LINE TEST START
 	#[test]
-	fn line_pt_dist() {
+	fn line_pt_dist_test() {
+		//Test a line segment
 		let p1 = Point::new(1.0, 9.0);
 		let p4 = Point::new(12.0, 2.0);
 		let p5 = Point::new(6.0, 4.0);
 
 		let p2 = Point::new(3.0, 5.0);
 		let p3 = Point::new(9.0, 0.0);
+		let p0 = Point::new(3.0,5.0);
 
 		let l1 = Line::new(p2, p3, false);
 		assert_eq!(l1.distance_to_point(&p1), p2.distance(&p1));
 		assert_eq!(l1.distance_to_point(&p4), p3.distance(&p4));
 		assert!(l1.distance_to_point(&p5) - 1.1523319192613102 < EPSILON);
+		assert_eq!(l1.distance_to_point(&p0) < EPSILON, true);
+
+
+		// Now test an infinite line
+		let p6 = Point::new(2.0, 5.0);
+		let p7 = Point::new(10.0, 6.0);
+		let l2 = Line::new(p6, p7, true);
+
+		let p8 = Point::new(1.0, 5.0);
+		let p9 = Point::new(2.0, 6.0);
+		let p10 = Point::new(13.0, 7.0);
+		let p11 = Point::new(6.0, 4.0);
+
+		assert!(l2.distance_to_point(&p8) - 0.124034734 < EPSILON);
+		assert!(l2.distance_to_point(&p9)-  0.99227787 < EPSILON);
+		assert!(l2.distance_to_point(&p10)- 0.6201736729< EPSILON);
+		assert!(l2.distance_to_point(&p11)- 1.48841681507 < EPSILON);
+
 	}	
+
+	#[test] 
+	fn line_line_dist_test() {
+
+		let p1 = Point::new(1.0, 1.0);
+		let p2 = Point::new(5.0, 5.0);
+		let l1 = Line::new(p1,p2,false);
+
+		let p3 = Point::new(2.0, 1.0);
+		let p4 = Point::new(2.0, -5.0);	//vertical line segment
+		let l2 = Line::new(p3,p4,false);
+
+		let p5 = Point::new(4.0, 12.0);
+		let p6 = Point::new(8.0, 5.0);
+		let l3 = Line::new(p5,p6,true);
+
+		let p7 = Point::new(0.0, 0.0);
+		let p8 = Point::new(6.0, 0.0);	//infinite horizontal line
+		let l4 = Line::new(p7,p8,true);
+
+		assert_eq!(l1.distance_to_line(&l2), l1.distance_to_point(&p3));
+		assert_eq!(l1.distance_to_line(&l3), l3.distance_to_point(&p2));
+		assert_eq!(l1.distance_to_line(&l4), 1.0);
+
+		assert_eq!(l2.distance_to_line(&l3), l3.distance_to_point(&p3));
+		assert_eq!(l2.distance_to_line(&l4), 0.0);
+
+		assert_eq!(l3.distance_to_line(&l4), 0.0);
+	}
 	//LINE TEST END
 
 

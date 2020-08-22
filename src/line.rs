@@ -77,7 +77,7 @@ impl Line {
 
 		}
 		let num = f64::abs((self.p2.y - self.p1.y)*p.x - (self.p2.x - self.p1.x)*p.y + self.p2.x*self.p1.y - self.p2.y*self.p1.x);
-		let denom = self.length();
+		let denom = self.p1.distance(&self.p2);	
 		if f64::abs(denom) > EPSILON {
 			return num/denom;
 		}
@@ -92,13 +92,13 @@ impl Line {
 			//all distances are the same so return this one arbitrarily
 			return self.p1.distance(&other.p1);
 		}
-		//non parallel infinite lines always intersect
-		if self.infinite && other.infinite {
+
+		if self.intersects(&other) {
 			return 0.0;
 		}
-		
-		//one infinite vs one segment?
 
+		//distance of 2 line segments is always min of the distance
+		//from one endpoint to the other line 
 		let d1 = self.distance_to_point(&other.p1);
 		let d2 = self.distance_to_point(&other.p2);
 		let d3 = other.distance_to_point(&self.p1);
@@ -121,7 +121,27 @@ impl Line {
 
 
 	pub fn intersects(&self, other: &Line) -> bool {
+		if self.infinite && other.infinite && !self.is_parallel(&other) {
+			return true;
+		}
+		if self.infinite {
+			let nx = self.p1.y - self.p2.y;
+			let ny = self.p2.x - self.p1.x;
 
+			let p1x = other.p1.x - self.p1.x;
+			let p1y = other.p1.y - self.p1.y;
+			let p2x = other.p2.x - self.p1.x;
+			let p2y = other.p2.y - self.p2.y;
+
+			let d1 = nx*p1x + ny*p1y;
+			let d2 = nx*p2x + ny*p2y;
+
+			return (d1 < 0.0 && d2 > 0.0) || (d1 > 0.0 && d2 < 0.0); 
+
+		}
+		else if other.infinite {
+
+		}
 		let o1 = self.p1.orientation(&self.p2, &other.p1);
 		let o2 = self.p1.orientation(&self.p2, &other.p2);
 		let o3 = other.p1.orientation(&other.p2, &self.p1);
