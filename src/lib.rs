@@ -6,11 +6,10 @@ pub mod polygon;
 
 #[cfg(test)]
 mod tests {
-	use super::point::Point;
-	use super::line::Line;
-	use super::circle::Circle;
-	use super::polygon::Polygon;
-
+	use super::point::*;
+	use super::line::*;
+	use super::circle::*;
+	use super::polygon::*;
 	const EPSILON: f64 = 0.00001;
 
 	//POINT TEST START
@@ -27,7 +26,7 @@ mod tests {
 	}
 
 	#[test]
-	fn collinear_test() {
+	fn point_collinear_test() {
 		//this also tests triangleArea 
 		let p1 = Point::new(1.0, 2.0);
 		let p2 = Point::new(1.0, 3.0);
@@ -40,13 +39,19 @@ mod tests {
 	}
 
 	#[test]
-	fn orientation_test() {
+	fn point_orientation_test() {
 		let p1 = Point::new(1.0, 2.0);
 		let p2 = Point::new(3.0, 5.0);
 		let p3 = Point::new(4.0, 6.0);
 
 		assert_eq!(p1.orientation(&p2, &p3), 1);
 		assert_eq!(p3.orientation(&p2, &p1), 2);
+	}
+
+	#[test]
+	//not tested yet
+	fn point_convex_hull_test() {
+		assert!(false);
 	}
 	//POINT TEST END
 
@@ -117,7 +122,7 @@ mod tests {
 	}
 
 	#[test]
-	fn parallel_test() {
+	fn line_parallel_test() {
 		let p1 = Point::new(1.0,1.0);
 		let p2 = Point::new(5.0,5.0);
 		let l1 = Line::new(p1,p2, true);
@@ -186,11 +191,124 @@ mod tests {
 		assert!(l6.is_parallel(&l6));
 
 	}
+
+	#[test]
+	fn line_intersects_test() {
+		let p1 = Point::new(1.0, 1.0);
+		let p2 = Point::new(5.0, 5.0);
+		let l1 = Line::new(p1,p2,true);
+
+		let p3 = Point::new(2.0, 1.0);
+		let p4 = Point::new(2.0, -5.0);	//vertical line segment
+		let l2 = Line::new(p3,p4,false);
+
+		let p5 = Point::new(4.0, 12.0);
+		let p6 = Point::new(8.0, 5.0);
+		let l3 = Line::new(p5,p6,true);
+
+		let p7 = Point::new(5.0, 0.0);
+		let p8 = Point::new(6.0, 0.0);	//infinite horizontal line
+		let l4 = Line::new(p7,p8,true);
+
+		assert!(!l1.intersects(&l2));
+		assert!(l1.intersects(&l3));
+		assert!(l1.intersects(&l4));
+
+		assert!(!l2.intersects(&l1));
+		assert!(!l2.intersects(&l3));
+		assert!(l2.intersects(&l4));
+
+		assert!(l3.intersects(&l1));
+		assert!(!l3.intersects(&l2));
+		assert!(l3.intersects(&l4));
+
+		assert!(l4.intersects(&l1));
+		assert!(l4.intersects(&l2));
+		assert!(l4.intersects(&l3));
+		
+	}
+
+	#[test]
+	//Not tested yet
+	fn line_intersection_test() {
+		assert!(false);
+	}
 	//LINE TEST END
 
 
 	//CIRCLE TEST START
+	#[test]
+	fn circle_circumference_test() {
+		let p1 = Point::new(0.0,0.0);
+		let r:f64 = 6.0;
+		let c = Circle::new(p1, r);
+		assert!(c.circumference() - 37.69911 < EPSILON);
+	}
 
+	#[test]
+	fn circle_area_test() {
+		let p1 = Point::new(0.0,0.0);
+		let r:f64 = 6.0;
+		let c = Circle::new(p1, r);
+		assert!(c.area() - 226.19467105 < EPSILON);
+	}
+
+	#[test]
+	fn circle_intersects_circle() {
+		let p1 = Point::new(0.0,0.0);
+		let r1:f64 = 6.0;
+		let c1 = Circle::new(p1, r1);
+
+		let p2 = Point::new(0.0,0.0);
+		let r2:f64 = 6.0;
+		let c2 = Circle::new(p2, r2);
+
+		let p3 = Point::new(10.0,10.0);
+		let r3:f64 = 3.0;
+		let c3 = Circle::new(p3, r3);
+
+		let p4 = Point::new(4.0,4.0);
+		let r4:f64 = 7.0;
+		let c4 = Circle::new(p4, r4);
+
+		assert!(c1.intersects_circle(&c2));
+		assert!(!c1.intersects_circle(&c3));
+		assert!(c1.intersects_circle(&c4));
+	}
+
+	#[test]
+	fn circle_distance_from_circle_test() {
+		let p1 = Point::new(0.0,0.0);
+		let r1:f64 = 6.0;
+		let c1 = Circle::new(p1, r1);
+
+		let p2 = Point::new(10.0,10.0);
+		let r2:f64 = 9.0;
+		let c2 = Circle::new(p2, r2);
+
+		let p3 = Point::new(-10.0,-10.0);
+		let r3:f64 = 3.0;
+		let c3 = Circle::new(p3, r3);
+
+		assert_eq!(c1.distance_from_circle(&c2), 0.0);
+		assert_eq!(c1.distance_from_circle(&c3), p1.distance(&p3) - r1 - r3);
+
+	}
+
+	#[test] 
+	fn circle_distance_from_point() {
+		let p1 = Point::new(0.0,0.0);
+		let r1:f64 = 6.0;
+		let c1 = Circle::new(p1, r1);
+
+		let p2 = Point::new(2.0,1.0);
+
+		let p3 = Point::new(-10.0,-10.0);
+
+
+		assert_eq!(c1.distance_from_point(&p2), 0.0);
+		assert_eq!(c1.distance_from_point(&p3), p1.distance(&p3) - r1);
+	}
 	//CIRCLE TEST END
 
 

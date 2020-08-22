@@ -1,7 +1,7 @@
 use crate::point::Point;
 
 const EPSILON: f64 = 0.00001;
-const PI: f64 = 3.141592653589793238462;
+const PI: f64 = std::f64::consts::PI;
 //Struct
 pub struct Circle {
 	center: Point,
@@ -42,7 +42,7 @@ impl Circle {
 		if self.intersects_circle(other) {
 			return 0.0;
 		}
-		self.center.distance(&other.center) - self.radius + other.radius 
+		self.center.distance(&other.center) - self.radius - other.radius 
 	}
 
 	pub fn distance_from_point(&self, p:&Point) -> f64 {
