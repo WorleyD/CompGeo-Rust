@@ -125,22 +125,23 @@ impl Line {
 			return true;
 		}
 		if self.infinite {
-			let nx = self.p1.y - self.p2.y;
-			let ny = self.p2.x - self.p1.x;
+			let m = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x);
+			let b = self.p2.y - m*self.p2.x;
 
-			let p1x = other.p1.x - self.p1.x;
-			let p1y = other.p1.y - self.p1.y;
-			let p2x = other.p2.x - self.p1.x;
-			let p2y = other.p2.y - self.p2.y;
-
-			let d1 = nx*p1x + ny*p1y;
-			let d2 = nx*p2x + ny*p2y;
+			let d1 = other.p1.y - m*other.p1.x - b;
+			let d2 = other.p2.y - m*other.p2.x - b;
 
 			return (d1 < 0.0 && d2 > 0.0) || (d1 > 0.0 && d2 < 0.0); 
 
 		}
 		else if other.infinite {
+			let m = (other.p2.y - other.p1.y) / (other.p2.x - other.p1.x);
+			let b = other.p2.y - m*other.p2.x;
 
+			let d1 = self.p1.y - m*self.p1.x - b;
+			let d2 = self.p2.y - m*self.p2.x - b; 
+
+			return (d1 < 0.0 && d2 > 0.0) || (d1 > 0.0 && d2 < 0.0); 
 		}
 		let o1 = self.p1.orientation(&self.p2, &other.p1);
 		let o2 = self.p1.orientation(&self.p2, &other.p2);

@@ -102,7 +102,7 @@ mod tests {
 		let p6 = Point::new(8.0, 5.0);
 		let l3 = Line::new(p5,p6,true);
 
-		let p7 = Point::new(0.0, 0.0);
+		let p7 = Point::new(5.0, 0.0);
 		let p8 = Point::new(6.0, 0.0);	//infinite horizontal line
 		let l4 = Line::new(p7,p8,true);
 
