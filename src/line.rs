@@ -6,20 +6,21 @@ const EPSILON: f64 = 0.00001;
 pub struct Line {
 	p1: Point,
 	p2: Point,
+	infinite: bool,
 }
 
 //Constructors
 impl Line {
 	//TODO Ensure any two points used to create a line ARE NOT the same
 	//from 2 point objects
-	pub fn new(p1: Point, p2: Point) -> Self {
+	pub fn new(p1: Point, p2: Point, infinite: bool) -> Self {
 		Self {
 			p1,
 			p2,
+			infinite,
 		}
 	}
 
-	/* Removed until support for infinite lines are added
 	//from y = mx + b equation (TODO how to handle vertical lines?)
 	pub fn from_equation(m:f64, b:f64, p1:Point) -> Self {
 		let p2x = p1.x + 1.0;
@@ -28,40 +29,75 @@ impl Line {
 		Self {
 			p1,
 			p2: p,
+			infinite: true,
 		}
 	}
-	*/
+	
 
 	//from 4 floats 
-	pub fn from_coordinates(x1: f64, y1: f64, x2: f64, y2:f64) -> Self {
+	pub fn from_coordinates(x1: f64, y1: f64, x2: f64, y2:f64, infinite: bool) -> Self {
 		let p1 = Point::new(x1,y1);
 		let p2 = Point::new(x2,y2);
-		Line::new(p1, p2)
+		Line::new(p1, p2, infinite)
 	}
 }
 
 // Methods
 impl Line {
 	pub fn length(&self) -> f64 {
+		if self.infinite {
+			return -1.0;
+		}
 		self.p1.distance(&self.p2)
 	}
 
+	//works for infinte lines and segments
 	pub fn distance_to_point(&self, p: &Point) -> f64 {
-		let num = (self.p2.y - self.p1.y)*p.x - (self.p2.x - self.p1.x)*p.y + self.p2.x*self.p1.y - self.p2.y*self.p1.x;
+		//pretty easy if infinite
+		if !self.infinite {
+			//check if its closer to an endpoint of the segment
+			let dx = self.p2.x - self.p1.x;
+			let dy = self.p2.y - self.p1.y;
+
+			let d2x = self.p1.x - p.x;
+			let d2y = self.p1.y - p.y;
+
+			let dot = (dx*d2x + dy*d2y);
+			if dot > EPSILON {
+				return (d2x*d2x + d2y*d2y).sqrt();
+			}
+
+			let d3x = p.x - self.p2.x;
+			let d3y = p.y - self.p2.y;
+
+			let dot2 = (dx*d3x + dy*d3y);
+			if dot2 > EPSILON {
+				return (d3x*d3x + d3y*d3y).sqrt();
+			}
+
+		}
+		let num = f64::abs((self.p2.y - self.p1.y)*p.x - (self.p2.x - self.p1.x)*p.y + self.p2.x*self.p1.y - self.p2.y*self.p1.x);
 		let denom = self.length();
-		if f64::abs(denom) < EPSILON {
+		if f64::abs(denom) > EPSILON {
 			return num/denom;
 		}
 		//basic error information
-		-1.0
+		return -1.0;
+
 	}
 
 	pub fn distance_to_line(&self, other: &Line) -> f64 {
 
 		if self.is_parallel(other) {
-			//all distances are the same so return this one
+			//all distances are the same so return this one arbitrarily
 			return self.p1.distance(&other.p1);
 		}
+		//non parallel infinite lines always intersect
+		if self.infinite && other.infinite {
+			return 0.0;
+		}
+		
+		//one infinite vs one segment?
 
 		let d1 = self.distance_to_point(&other.p1);
 		let d2 = self.distance_to_point(&other.p2);

@@ -13,6 +13,7 @@ mod tests {
 
 	const EPSILON: f64 = 0.00001;
 
+	//POINT TEST START
 	#[test]
 	fn point_dist_test() {
 		let p1 = Point::new(1.0, 4.0);
@@ -27,6 +28,7 @@ mod tests {
 
 	#[test]
 	fn collinear_test() {
+		//this also tests triangleArea 
 		let p1 = Point::new(1.0, 2.0);
 		let p2 = Point::new(1.0, 3.0);
 		let p3 = Point::new(1.0, 4.0);
@@ -46,5 +48,33 @@ mod tests {
 		assert_eq!(p1.orientation(&p2, &p3), 1);
 		assert_eq!(p3.orientation(&p2, &p1), 2);
 	}
+	//POINT TEST END
 
+
+	//LINE TEST START
+	#[test]
+	fn line_pt_dist() {
+		let p1 = Point::new(1.0, 9.0);
+		let p4 = Point::new(12.0, 2.0);
+		let p5 = Point::new(6.0, 4.0);
+
+		let p2 = Point::new(3.0, 5.0);
+		let p3 = Point::new(9.0, 0.0);
+
+		let l1 = Line::new(p2, p3, false);
+		assert_eq!(l1.distance_to_point(&p1), p2.distance(&p1));
+		assert_eq!(l1.distance_to_point(&p4), p3.distance(&p4));
+		assert!(l1.distance_to_point(&p5) - 1.1523319192613102 < EPSILON);
+	}	
+	//LINE TEST END
+
+
+	//CIRCLE TEST START
+
+	//CIRCLE TEST END
+
+
+	//POLYGON TEST START
+
+	//POLYGON TEST END
 }
