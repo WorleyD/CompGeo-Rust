@@ -51,6 +51,13 @@ impl Line {
 		self.p1.distance(&self.p2)
 	}
 
+
+	pub fn get_equation(&self) -> (f64, f64) {
+		let m = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x);
+		let b = self.p2.y - m*self.p2.x;
+		(m,b)
+	}
+
 	//works for infinte lines and segments
 	pub fn distance_to_point(&self, p: &Point) -> f64 {
 		//pretty easy if infinite
@@ -62,7 +69,7 @@ impl Line {
 			let d2x = self.p1.x - p.x;
 			let d2y = self.p1.y - p.y;
 
-			let dot = (dx*d2x + dy*d2y);
+			let dot = dx*d2x + dy*d2y;
 			if dot > EPSILON {
 				return (d2x*d2x + d2y*d2y).sqrt();
 			}
@@ -70,7 +77,7 @@ impl Line {
 			let d3x = p.x - self.p2.x;
 			let d3y = p.y - self.p2.y;
 
-			let dot2 = (dx*d3x + dy*d3y);
+			let dot2 = dx*d3x + dy*d3y;
 			if dot2 > EPSILON {
 				return (d3x*d3x + d3y*d3y).sqrt();
 			}
@@ -125,6 +132,7 @@ impl Line {
 			return true;
 		}
 		if self.infinite {
+			//equation of line
 			let m = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x);
 			let b = self.p2.y - m*self.p2.x;
 

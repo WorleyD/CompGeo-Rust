@@ -115,6 +115,77 @@ mod tests {
 
 		assert_eq!(l3.distance_to_line(&l4), 0.0);
 	}
+
+	#[test]
+	fn parallel_test() {
+		let p1 = Point::new(1.0,1.0);
+		let p2 = Point::new(5.0,5.0);
+		let l1 = Line::new(p1,p2, true);
+
+		let p3 = Point::new(2.0,2.0);
+		let p4 = Point::new(6.0,6.0);
+		let l2 = Line::new(p3,p4, true);
+
+		let p5 = Point::new(0.0, 5.0);
+		let p6 = Point::new(0.0,10.0);
+		let l3 = Line::new(p5,p6, false);
+
+		let p7 = Point::new(1.0, 5.0);
+		let p8 = Point::new(1.0, 10.0);
+		let l4 = Line::new(p7,p8, false);
+
+		let p9 = Point::new(1.0, 0.0);
+		let p10 = Point::new(5.0, 0.0);
+		let l5 = Line::new(p9,p10, true);
+
+		let p11 = Point::new(1.0,1.0);
+		let p12 = Point::new(5.0,1.0);
+		let l6 = Line::new(p11,p12, false);
+
+		assert!(l1.is_parallel(&l2));
+		assert!(!l1.is_parallel(&l3));
+		assert!(!l1.is_parallel(&l4));
+		assert!(!l1.is_parallel(&l5));
+		assert!(!l1.is_parallel(&l6));
+
+		assert!(l2.is_parallel(&l1));
+		assert!(!l2.is_parallel(&l3));
+		assert!(!l2.is_parallel(&l4));
+		assert!(!l2.is_parallel(&l5));
+		assert!(!l2.is_parallel(&l6));
+
+		assert!(!l3.is_parallel(&l1));
+		assert!(!l3.is_parallel(&l2));
+		assert!(l3.is_parallel(&l4));
+		assert!(!l3.is_parallel(&l5));
+		assert!(!l3.is_parallel(&l5));
+
+		assert!(!l4.is_parallel(&l1));
+		assert!(!l4.is_parallel(&l2));
+		assert!(l4.is_parallel(&l3));
+		assert!(!l4.is_parallel(&l5));
+		assert!(!l4.is_parallel(&l6));
+
+		assert!(!l5.is_parallel(&l1));
+		assert!(!l5.is_parallel(&l2));
+		assert!(!l5.is_parallel(&l3));
+		assert!(!l5.is_parallel(&l4));
+		assert!(l5.is_parallel(&l6));
+
+		assert!(!l6.is_parallel(&l1));
+		assert!(!l6.is_parallel(&l2));
+		assert!(!l6.is_parallel(&l3));
+		assert!(!l6.is_parallel(&l4));
+		assert!(l6.is_parallel(&l5));
+
+		assert!(l1.is_parallel(&l1));
+		assert!(l2.is_parallel(&l2));
+		assert!(l3.is_parallel(&l3));
+		assert!(l4.is_parallel(&l4));
+		assert!(l5.is_parallel(&l5));
+		assert!(l6.is_parallel(&l6));
+
+	}
 	//LINE TEST END
 
 
