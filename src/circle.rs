@@ -60,15 +60,18 @@ impl Circle {
 	//p1 and p2 are points that lie on the circle
 	pub fn arc_length(&self, p1: &Point, p2: &Point) ->f64 {
 		let c = self.circumference();
-		let d1 = self.distance_from_point(&p1);
-		let d2 = self.distance_from_point(&p2);
+		let d1 = self.center.distance(&p1);
+		let d2 = self.center.distance(&p2);
 		let d3 = p1.distance(&p2);
 
+		println!("{} : {} {} {}", c, d1, d2, d3);
 		let n = (d1*d1) + (d2*d2) - (d3*d3);
 		let d = 2.0*d1*d2;
 
 		let angle = (n/d).acos();
 		let length = angle/(2.0*PI);
+
+		println!("{} {} {} {}",n,d,length,angle);
 		c*length
 	}
 

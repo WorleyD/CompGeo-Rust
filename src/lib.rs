@@ -309,6 +309,51 @@ mod tests {
 		assert_eq!(c1.distance_from_point(&p2), 0.0);
 		assert_eq!(c1.distance_from_point(&p3), p1.distance(&p3) - r1);
 	}
+
+	#[test]
+	fn circle_contains_circle_test() {
+		let p1 = Point::new(0.0,0.0);
+		let r1:f64 = 6.0;
+		let c1 = Circle::new(p1, r1);
+
+		let p2 = Point::new(1.0,1.0);
+		let r2:f64 = 2.0;
+		let c2 = Circle::new(p2, r2);
+
+		let p3 = Point::new(6.0,0.0);
+		let r3:f64 = 3.0;
+		let c3 = Circle::new(p3, r3);
+
+		let p4= Point::new(10.0,10.0);
+		let r4:f64 = 2.0;
+		let c4 = Circle::new(p4, r4);
+
+		assert!(c1.contains_circle(&c2));
+		assert!(!c1.contains_circle(&c3));
+		assert!(!c1.contains_circle(&c4));
+	}
+
+	#[test]
+	fn circle_arc_length_test() {
+		let p1 = Point::new(0.0,0.0);
+		let r1:f64 = 6.0;
+		let c1 = Circle::new(p1, r1);
+
+		let p2 = Point::new(-6.0, 0.0);
+		let p3 = Point::new(6.0, 0.0);
+
+		let p4 = Point::new(0.0, 6.0);
+		let p5 = Point::new(0.0, -6.0);
+
+		let c2 = c1.circumference()/2.0;
+		let c4 = c2/2.0;
+
+		assert!(c1.arc_length(&p3, &p2) - c2 < EPSILON);
+		assert!(c1.arc_length(&p5, &p4) - c2 < EPSILON);
+
+		assert!(c1.arc_length(&p5, &p3) - c4 < EPSILON);
+		assert!(c1.arc_length(&p3, &p4) - c4 < EPSILON);
+	}
 	//CIRCLE TEST END
 
 
