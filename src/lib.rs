@@ -51,7 +51,23 @@ mod tests {
 	#[test]
 	//not tested yet
 	fn point_convex_hull_test() {
-		assert!(false);
+		let xs: [f64; 7] = [0.0, 0.0, 1.0, 2.0, 1.0, 1.0, 2.0];
+		let ys: [f64; 7] = [0.0, 6.0, 7.0, 5.0, 2.0, 1.0, 0.0];
+
+		let mut points: Vec<Point> = Vec::new();
+
+		for i in 0..6 {
+			let p = Point::new(xs[i], ys[i]);
+			points.push(p);
+		}
+
+		let res = convex_hull(&points);
+		for p in &res {
+			println!("{}, {}", p.x, p.y);
+		}
+		//run cargo test -- --nocapture
+		//to see stdout output during testing
+		assert!(res.len() == 5);
 	}
 	//POINT TEST END
 
@@ -360,7 +376,7 @@ mod tests {
 	//POLYGON TEST START
 	#[test]
 	fn polygon_area_test() {
-		// This is a convex, regular polygon
+		// This is a concave, regular polygon
 		let xs: [f64; 6] = [0.0, 0.0, 1.0, 2.0, 1.0, 2.0];
 		let ys: [f64; 6] = [0.0, 6.0, 7.0, 5.0, 2.0, 0.0];
 

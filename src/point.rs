@@ -2,7 +2,9 @@ use crate::line::Line;
 use std::vec::Vec;
 
 const EPSILON: f64 = 0.00001;
+
 //POINT
+#[derive(Copy, Clone)]
 pub struct Point {
 	pub x: f64,
 	pub y: f64,
@@ -49,14 +51,12 @@ impl Point {
 	}
 }
 
-// Returns a vector of indexes for points in convex hull
-// TODO implement Copy for Points so a vec of points can be returned
-// Not even remotely tested
-pub fn convex_hull(points: &Vec<Point>) -> Vec<usize>{
+// Returns a vector of points in convex hull
+pub fn convex_hull(points: &Vec<Point>) -> Vec<Point>{
 	let n = points.len();
 
 	if n < 3 {
-		return vec![0,1,2]
+		return vec![points[0], points[1], points[2]];
 	}
 
 	let mut hull = Vec::new();
@@ -67,11 +67,11 @@ pub fn convex_hull(points: &Vec<Point>) -> Vec<usize>{
 	let mut q = 0;
 
 	loop {
-		hull.push(p);
+		hull.push(points[p]);
 		q = (p+1)%n;
 
 		for i in 0..n {
-			if points[p].orientation(&points[i], &points[q]) == 2{
+			if points[p].orientation(&points[i], &points[q]) == 2 {
 				q = i;
 			}
 		}
@@ -82,8 +82,7 @@ pub fn convex_hull(points: &Vec<Point>) -> Vec<usize>{
 			break;
 		}
 	}
-
-	return hull
+	hull
 }
 
 //Helper function for convex hull
