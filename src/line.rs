@@ -44,6 +44,10 @@ impl Line {
 
 // Methods
 impl Line {
+	pub fn equals(&self, other: &Line) -> bool {
+		self.p1.equals(&other.p1) && self.p2.equals(&other.p2) && self.infinite == other.infinite
+	}
+
 	pub fn length(&self) -> f64 {
 		if self.infinite {
 			return -1.0;
@@ -131,6 +135,7 @@ impl Line {
 		if self.infinite && other.infinite && !self.is_parallel(&other) {
 			return true;
 		}
+		
 		if self.infinite {
 			//equation of line
 			let m = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x);
@@ -151,6 +156,7 @@ impl Line {
 
 			return (d1 < 0.0 && d2 > 0.0) || (d1 > 0.0 && d2 < 0.0); 
 		}
+
 		let o1 = self.p1.orientation(&self.p2, &other.p1);
 		let o2 = self.p1.orientation(&self.p2, &other.p2);
 		let o3 = other.p1.orientation(&other.p2, &self.p1);
@@ -162,7 +168,6 @@ impl Line {
 
 	//Intersection of line SEGMENTS 
 	pub fn intersection(&self, other: &Line) -> Point {
-
 		//do a parallel check. Would just call the function but these values are needed later
 		let a1 = self.p2.y - self.p1.y;
 		let b1 = self.p1.x - self.p2.x;

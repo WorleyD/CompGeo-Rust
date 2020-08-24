@@ -22,8 +22,16 @@ impl Point {
 
 //Methods
 impl Point {
+	pub fn equals(&self, other: &Point) -> bool {
+		self.x == other.x && self.y == other.y
+	}
+
 	pub fn distance(&self, other: &Point) -> f64{
 		((self.x - other.x)*(self.x-other.x) + (self.y - other.y)*(self.y - other.y)).sqrt()
+	}
+
+	pub fn distance_squared(&self, other: &Point) -> f64{
+		((self.x - other.x)*(self.x-other.x) + (self.y - other.y)*(self.y - other.y))
 	}
 
 	pub fn distance_to_line(&self, other: &Line) -> f64 {

@@ -26,6 +26,10 @@ impl Circle {
 
 //Methods
 impl Circle {
+	pub fn equals(&self, other:&Circle) -> bool {
+		self.center.equals(&other.center) && self.radius == other.radius
+	} 
+
 	pub fn circumference(&self) -> f64 {
 		2.0*PI*self.radius
 	}
