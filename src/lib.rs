@@ -358,6 +358,21 @@ mod tests {
 
 
 	//POLYGON TEST START
+	#[test]
+	fn polygon_area_test() {
+		// This is a convex, regular polygon
+		let xs: [f64; 6] = [0.0, 0.0, 1.0, 2.0, 1.0, 2.0];
+		let ys: [f64; 6] = [0.0, 6.0, 7.0, 5.0, 2.0, 0.0];
 
+		let mut points: Vec<Point> = Vec::new();
+
+		for i in 0..6 {
+			let p = Point::new(xs[i], ys[i]);
+			points.push(p);
+		}
+		let poly = Polygon::from_vec(points);
+		assert_eq!(poly.area(), 10.0);
+
+	}
 	//POLYGON TEST END
 }

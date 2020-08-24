@@ -16,7 +16,7 @@ impl Polygon {
 	//	1. There are 3+ points in the vector
 	//	2. The first 3 points are not collinear
 	// Should handle cases where that is not guaranteed
-	pub fn from_vec(&self, points: Vec<Point>) -> Self {
+	pub fn from_vec(points: Vec<Point>) -> Self {
 		let o = points[0].orientation(&points[1], &points[2]);
 
 		Polygon {
