@@ -79,5 +79,9 @@ impl Circle {
 		c*length
 	}
 
+	pub fn arc_length_angle(&self, angle:f64) -> f64 {
+		self.radius*angle
+	}
+
 }
 
