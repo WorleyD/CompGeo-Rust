@@ -56,7 +56,7 @@ mod tests {
 
 		let mut points: Vec<Point> = Vec::new();
 
-		for i in 0..6 {
+		for i in 0..7 {
 			let p = Point::new(xs[i], ys[i]);
 			points.push(p);
 		}
@@ -68,6 +68,72 @@ mod tests {
 		//run cargo test -- --nocapture
 		//to see stdout output during testing
 		assert!(res.len() == 5);
+	}
+
+	#[test]
+	fn point_brute_closest_test() {
+		let p1 = Point::new(1.0,1.0);
+		let p2 = Point::new(4.0,4.0);
+		let p3 = Point::new(4.0,5.0);
+
+		let mut points = Vec::new();
+		points.push(p1);
+		points.push(p2);
+		points.push(p3);
+
+		closest_brute_force(points, 3);
+
+	}
+
+	#[test]
+	fn point_closest_pair_test() {
+		//assert!(false);
+		//swap last x/y with (0.0, 5.5) to test when shortest is on the left and 
+		let mut xs1: [f64; 10] = [0.0, 0.0, 1.0, 2.0, 1.0, 1.0, 2.0, 4.0, 4.0, 4.5];
+		let mut ys1: [f64; 10] = [0.0, 6.0, 7.0, 5.0, 2.0, 1.0, 0.0, 4.0, 1.0, 1.0];
+
+		let mut xs2: [f64; 10] = [0.0, 0.0, 1.0, 2.0, 1.0, 1.0, 2.0, 4.0, 4.0, 0.0];
+		let mut ys2: [f64; 10] = [0.0, 6.0, 7.0, 5.0, 2.0, 1.0, 0.0, 4.0, 1.0, 5.5];
+
+		let mut xs3: [f64; 10] = [0.0, 0.0, 1.0, 2.0, 1.0, 1.0, 2.0, 4.0, 4.0, 2.5];
+		let mut ys3: [f64; 10] = [0.0, 6.0, 7.0, 5.0, 2.0, 1.0, 0.0, 4.0, 1.0, 0.0];
+
+
+		let mut points: Vec<Point> = Vec::new();
+
+		for i in 0..10 {
+			let p = Point::new(xs1[i], ys1[i]);
+			points.push(p);
+		}
+
+		let mut points2: Vec<Point> = Vec::new();
+
+		for i in 0..10 {
+			let p = Point::new(xs2[i], ys2[i]);
+			points2.push(p);
+		}
+
+		let mut points3: Vec<Point> = Vec::new();
+
+		for i in 0..10 {
+			let p = Point::new(xs3[i], ys3[i]);
+			points3.push(p);
+		}
+
+		//pair on left side
+		let (p1,p2,d) = closest_pair(&points);
+		assert_eq!(d, 0.5);
+
+		//pair on right side
+		let (p1,p2,d) = closest_pair(&points2);
+		assert_eq!(d, 0.5);
+
+		//pair in middle
+		let (p1,p2,d) = closest_pair(&points3);
+		assert_eq!(d, 0.5);
+
+	
+
 	}
 	//POINT TEST END
 
@@ -377,8 +443,21 @@ mod tests {
 	#[test]
 	fn polygon_area_test() {
 		// This is a concave, regular polygon
-		let xs: [f64; 6] = [0.0, 0.0, 1.0, 2.0, 1.0, 2.0];
-		let ys: [f64; 6] = [0.0, 6.0, 7.0, 5.0, 2.0, 0.0];
+		let mut xs: [f64; 6] = [0.0, 0.0, 1.0, 2.0, 1.0, 2.0];
+		let mut ys: [f64; 6] = [0.0, 6.0, 7.0, 5.0, 2.0, 0.0];
+
+		let mut points: Vec<Point> = Vec::new();
+
+		for i in 0..6 {
+			let p = Point::new(xs[i], ys[i]);
+			points.push(p);
+		}
+		let poly = Polygon::from_vec(points);
+		assert_eq!(poly.area(), 10.0);
+
+		// This is the same concave, regular polygon but with reversed orientation
+		let mut xs: [f64; 6] = [2.0, 1.0, 2.0, 1.0, 0.0, 0.0];
+		let mut ys: [f64; 6] = [0.0, 2.0, 5.0, 7.0, 6.0, 0.0];
 
 		let mut points: Vec<Point> = Vec::new();
 
