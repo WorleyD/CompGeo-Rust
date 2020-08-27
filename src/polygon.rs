@@ -29,6 +29,7 @@ impl Polygon {
 
 //Methods
 impl Polygon {
+	//find the area of any regular polygon
 	pub fn area(&self) -> f64{
 		let n = self.points.len();
 		let mut xs = Vec::new();

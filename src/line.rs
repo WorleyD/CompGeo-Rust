@@ -92,7 +92,7 @@ impl Line {
 		if f64::abs(denom) > EPSILON {
 			return num/denom;
 		}
-		//basic error information
+		//basic error information. Figure out something better soon
 		return -1.0;
 
 	}
@@ -103,7 +103,7 @@ impl Line {
 			//all distances are the same so return this one arbitrarily
 			return self.p1.distance(&other.p1);
 		}
-
+		//might be a more efficient way to handle this case
 		if self.intersects(&other) {
 			return 0.0;
 		}
@@ -166,7 +166,7 @@ impl Line {
 
 	}
 
-	//Intersection of line SEGMENTS 
+	//Intersection of lines. Untested atm
 	pub fn intersection(&self, other: &Line) -> Point {
 		//do a parallel check. Would just call the function but these values are needed later
 		let a1 = self.p2.y - self.p1.y;

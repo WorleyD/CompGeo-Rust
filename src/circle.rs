@@ -68,17 +68,17 @@ impl Circle {
 		let d2 = self.center.distance(&p2);
 		let d3 = p1.distance(&p2);
 
-		println!("{} : {} {} {}", c, d1, d2, d3);
 		let n = (d1*d1) + (d2*d2) - (d3*d3);
 		let d = 2.0*d1*d2;
 
 		let angle = (n/d).acos();
+		//length essentially is % of the circle between the given points
 		let length = angle/(2.0*PI);
 
-		println!("{} {} {} {}",n,d,length,angle);
 		c*length
 	}
 
+	//Angle must be in radians
 	pub fn arc_length_angle(&self, angle:f64) -> f64 {
 		self.radius*angle
 	}
