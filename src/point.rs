@@ -56,6 +56,14 @@ impl Point {
 
 		return if o > 0.0 {1} else {2}
 	}
+
+	pub fn on_line(&self, line:&Line) -> bool {
+		let l1 = Line::new(*self, line.p1, false);
+		let l2 = Line::new(*self, line.p2, false);
+		let p1 = Point::new(&self.x - line.p1.x, &self.y - line.p1.y);
+		let p2 = Point::new(&self.x - line.p2.x, &self.y - line.p2.y);
+		l1.is_parallel(&l2) && p1.x*p2.y + p2.x*p1.y < 0.0   
+	} 
 }
 
 // Returns a vector of points in convex hull

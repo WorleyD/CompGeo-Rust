@@ -64,6 +64,9 @@ impl Line {
 
 	//works for infinte lines and segments
 	pub fn distance_to_point(&self, p: &Point) -> f64 {
+		if p.on_line(&self) {
+			return 0.0
+		}
 		//pretty easy if infinite
 		if !self.infinite {
 			//check if its closer to an endpoint of the segment
@@ -99,10 +102,6 @@ impl Line {
 
 	pub fn distance_to_line(&self, other: &Line) -> f64 {
 
-		if self.is_parallel(other) {
-			//all distances are the same so return this one arbitrarily
-			return self.p1.distance(&other.p1);
-		}
 		//might be a more efficient way to handle this case
 		if self.intersects(&other) {
 			return 0.0;
@@ -130,7 +129,7 @@ impl Line {
 		f64::abs(a1*b2 - a2*b1) < EPSILON
 	}
 
-
+	// This needs to be retested for infinte/infinite and infinite/segment pairs in the parallel case
 	pub fn intersects(&self, other: &Line) -> bool {
 		if self.infinite && other.infinite && !self.is_parallel(&other) {
 			return true;
@@ -155,6 +154,14 @@ impl Line {
 			let d2 = self.p2.y - m*self.p2.x - b; 
 
 			return (d1 < 0.0 && d2 > 0.0) || (d1 > 0.0 && d2 < 0.0); 
+		}
+
+		//its possible line segments are parallel, collinear, and dont overlap. Check that case
+		if self.is_parallel(&other) {
+			if self.p1.on_line(&other) || self.p2.on_line(&other) || other.p1.on_line(&self) || other.p2.on_line(&self) {
+				return true
+			} 
+			return false
 		}
 
 		let o1 = self.p1.orientation(&self.p2, &other.p1);
