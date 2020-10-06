@@ -20,6 +20,6 @@ A computational geometry library written in Rust. Currently a work in progress. 
 -  Arc length from 2 points or angle (in radians)
 
 **Polygon:** 
--  Area function for all regular polygons.
+-  Area function for all convex polygons.
 -  Points can be given in clockwise or counter-clockwise order
 
